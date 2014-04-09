@@ -1,3 +1,4 @@
+echo "Hello" > /var/tmp/tmp.txt
 export PATH='C:\Program Files\nodejs':$PATH;
 
 
