@@ -62,6 +62,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-testem');
   grunt.loadNpmTasks('grunt-qunit-cov');
   grunt.loadNpmTasks('grunt-plato');
+    grunt.loadNpmTasks('jscoverage');
+	
 
   // Default task(s).
   grunt.registerTask('default', ['jshint', 'clean', 'qunit-cov']);
