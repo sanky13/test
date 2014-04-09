@@ -1,19 +1,25 @@
 {
-  "name": "jquery-plugin",
-  "version": "0.0.0-ignored",
-  "engines": {
-    "node": ">= 0.8.0"
-  },
+  "name": "awesome",
+  "version": "0.0.0",
+  "description": "Sample project of Grunt on Jenkins",
+  "main": "awesome.js",
   "scripts": {
-    "test": "grunt qunit"
+    "test": "grunt testem"
   },
+  "keywords": [
+    "jenkins",
+    "grunt",
+    "sample"
+  ],
+  "author": "sideroad",
+  "license": "MIT",
   "devDependencies": {
-    "grunt-contrib-clean": "~0.4.0rc6",
-    "grunt-contrib-jshint": "0.1.1rc6",
-    "grunt-contrib-qunit": "0.1.1rc6",
-    "grunt-contrib-concat": "0.1.2rc6",
-    "grunt-contrib-uglify": "0.1.1rc6",
-    "grunt-contrib-watch": "0.2.0rc5",
-    "grunt": "0.4.0rc7"
+    "grunt-contrib-clean": "~0.4.0",
+    "grunt-contrib-concat": "~0.2.0",
+    "grunt-contrib-jshint": "~0.4.3",
+    "grunt-contrib-uglify": "~0.2.0",
+    "grunt-testem": "~0.3.6",
+    "grunt-qunit-cov": "~0.3.2",
+    "grunt-plato": "~0.2.0"
   }
 }

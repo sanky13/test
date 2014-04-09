@@ -1,87 +1,70 @@
-'use strict';
-
 module.exports = function(grunt) {
 
   // Project configuration.
   grunt.initConfig({
-    // Metadata.
-    pkg: grunt.file.readJSON('tiny-pubsub.jquery.json'),
-    banner: '/*! <%= pkg.title || pkg.name %> - v<%= pkg.version %> - ' +
-      '<%= grunt.template.today("yyyy-mm-dd") %>\n' +
-      '<%= pkg.homepage ? "* " + pkg.homepage + "\\n" : "" %>' +
-      '* Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>;' +
-      ' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */\n',
-    // Task configuration.
-    clean: {
-      src: ['dist']
+    pkg: grunt.file.readJSON('package.json'),
+    clean: ['dist/*.js', 'test/testem.tap'],
+    jshint: {
+      all: ['src/*.js'],
+      options: grunt.file.readJSON('.jshintrc')
     },
     concat: {
-      options: {
-        banner: '<%= banner %>',
-        stripBanners: true
-      },
-      dist: {
-        src: ['src/<%= pkg.name %>.js'],
-        dest: 'dist/ba-<%= pkg.name %>.js'
-      },
+      build: {
+        files: {
+          'dist/<%= pkg.name %>.js': [
+            'src/superb.js',
+            'src/impressive.js'
+          ]
+        }
+      }
     },
     uglify: {
       options: {
-        banner: '<%= banner %>'
+        banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
       },
-      dist: {
-        src: '<%= concat.dist.dest %>',
-        dest: 'dist/ba-<%= pkg.name %>.min.js'
-      },
+      build: {
+        src: 'dist/<%= pkg.name %>.js',
+        dest: 'dist/<%= pkg.name %>.min.js'
+      }
     },
-    qunit: {
-      files: ['test/**/*.html']
+    testem: {
+      options: {
+        launch_in_ci: ['PhantomJS']
+      },
+      'test/testem.tap': ['test/*.html']
     },
-    jshint: {
-      gruntfile: {
-        options: {
-          jshintrc: '.jshintrc'
-        },
-        src: 'Gruntfile.js'
-      },
-      src: {
-        options: {
-          jshintrc: 'src/.jshintrc'
-        },
-        src: ['src/**/*.js']
-      },
+    "qunit-cov": {
       test: {
-        options: {
-          jshintrc: 'test/.jshintrc'
-        },
-        src: ['test/**/*.js']
-      },
+        minimum: 0.9,
+        srcDir: 'src',
+        depDirs: ['test'],
+        outDir: 'dist/cov',
+        testFiles: ['test/*.html']
+      }
     },
-    watch: {
-      gruntfile: {
-        files: '<%= jshint.gruntfile.src %>',
-        tasks: ['jshint:gruntfile']
+    plato: {
+      options: {
+        title: 'Awesome Project',
+        jshint: grunt.file.readJSON('.jshintrc')
       },
-      src: {
-        files: '<%= jshint.src.src %>',
-        tasks: ['jshint:src', 'qunit']
-      },
-      test: {
-        files: '<%= jshint.test.src %>',
-        tasks: ['jshint:test', 'qunit']
-      },
-    },
+      metrics: {
+        files: {
+          'dist/metrics': [ 'src/*.js' ]
+        }
+      }
+    }
   });
 
-  // These plugins provide necessary tasks.
   grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-uglify');
-  grunt.loadNpmTasks('grunt-contrib-qunit');
-  grunt.loadNpmTasks('grunt-contrib-jshint');
-  grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-testem');
+  grunt.loadNpmTasks('grunt-qunit-cov');
+  grunt.loadNpmTasks('grunt-plato');
 
-  // Default task.
-  grunt.registerTask('default', ['jshint', 'qunit', 'clean', 'concat', 'uglify']);
+  // Default task(s).
+  grunt.registerTask('default', ['jshint', 'testem', 'clean', 'qunit-cov']);
+  grunt.registerTask('jenkins', ['jshint', 'testem', 'clean', 'qunit-cov', 'plato', 'concat', 'uglify']);
 
 };
