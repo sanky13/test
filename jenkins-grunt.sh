@@ -1,4 +1,4 @@
-export PATH=/usr/local/bin:/path/to/node:/path/to/node_bin:/path/to/phantomjs:/path/to/jscoverage:$PATH;
+export PATH=C:\Program Files\nodejs\node_modules\npm\bin:C:\Program Files\nodejs:$PATH;
 
 npm install -g grunt-cli
 npm install
